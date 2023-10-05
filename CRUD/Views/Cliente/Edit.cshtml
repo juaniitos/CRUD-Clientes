@@ -1,0 +1,117 @@
+﻿@model CRUD.ViewModels.CatalogoViewModels.CrearCliente
+@{
+    ViewBag.Title = "Editar Cliente";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Editar Cliente</h2>
+
+@using (Html.BeginForm("Edit", "Cliente", FormMethod.Post, new { @class = "row" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="mb-3">
+        <label class="form-label" id="Id">ID</label>
+        @Html.EditorFor(
+        model => model.IdCliente,
+        new
+            {
+                htmlAttributes = new
+                {
+                    Type = "hidden",
+            //disabled = "disabled",
+            placeholder = @Model.IdCliente,
+            @class = "desabilitar-Input",
+            @id = "IdCliente",
+        }
+            })
+    </div>
+    <div class="mb-3">
+        <label class="form-label" id="Nombre">Nombre</label>
+        @Html.EditorFor(
+        model => model.Nombre,
+        new
+            {
+                htmlAttributes = new
+                {
+            placeholder = "Ingrese su nombre",
+            @class = "form-control",
+            @id = "Nombre",
+        }
+            })
+    </div>
+    <div class="mb-3">
+        <label class="form-label" id="RFC">RFC</label>
+        @Html.EditorFor(
+        model => model.RFC,
+        new
+        {
+           htmlAttributes = new
+        {
+                placeholder = "Ingrese su RFC",
+        @class = "form-control",
+        @id = "RFC",
+        }
+        })
+    </div>
+    <div class="mb-3">
+        <label class="form-label" id="Direccion">Dirección</label>
+        @Html.EditorFor(
+        model => model.Direccion,
+        new
+            {
+                htmlAttributes = new
+                {
+            placeholder = "Ingrese su dirección",
+            @class = "form-control",
+            @id = "Direccion",
+        }
+            })
+    </div>
+    <div class="mb-3">
+        <label class="form-label" id="CP">Código Postal</label>
+        @Html.EditorFor(
+        model => model.CP,
+        new
+            {
+                htmlAttributes = new
+                {
+            placeholder = "Ingrese su Código Postal",
+            @class = "form-control",
+            @id = "CP",
+        }
+            })
+    </div>
+    <div class="mb-3">
+        <label class="form-label" id="Email">Correo de contacto</label>
+        @Html.EditorFor(
+        model => model.Email,
+        new
+            {
+                htmlAttributes = new
+                {
+            placeholder = "Ingrese su Código Postal",
+            @class = "form-control",
+            @id = "Email",
+        }
+            })
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" id="Estado">Estado de Cliente</label>
+        @Html.EditorFor(
+        model => model.Estado,
+        new
+            {
+                htmlAttributes = new
+                {
+                    placeholder = "",
+                    @class = "desabilitar-Input",
+                    @id = "Estado",
+                }
+            })
+    </div>
+    <div>
+        @Html.ActionLink("Volver", "Detalle", null, new { @class = "btn btn-success" })
+        <input type="submit" value="Actualizar" class="btn btn-primary" />
+    </div>
+}

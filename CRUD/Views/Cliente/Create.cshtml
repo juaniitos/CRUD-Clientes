@@ -1,0 +1,152 @@
+﻿@model CRUD.ViewModels.CatalogoViewModels.CrearCliente
+@{
+    ViewBag.Title = "Crear Cliente";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Formulario para Crear Cliente</h2>
+
+@using (Html.BeginForm("Create", "Cliente", FormMethod.Post, new { @class = "row" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <div class="mb-3">
+        @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label cod-md-2" })
+        @Html.EditorFor(
+        model => model.Nombre,
+        new
+            {
+                htmlAttributes = new
+                {
+            placeholder = "Ingrese su nombre",
+            onpaste = "return false",
+            //onkeypress = "return sololetras(event)",
+            @class = "form-control",
+            @id = "Nombre",
+        }
+            })
+        @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "error-text" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(model => model.Apellidos, htmlAttributes: new { @class = "control-label cod-md-2" })
+        @Html.EditorFor(
+     model => model.Apellidos,
+     new
+     {
+         placeholder = "Ingrese su apellido",
+         onpaste = "return false",
+         //onkeypress = "return sololetras(event)",
+         @class = "form-control",
+         @id = "Apellidos",
+     })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(model => model.RFC, htmlAttributes: new { @class = "control-label cod-md-2" })
+        @Html.EditorFor(
+        model => model.RFC,
+        new
+            {
+                htmlAttributes = new
+                {
+                placeholder = "Ingrese su RFC",
+                @class = "form-control",
+                @id = "RFC",
+            }
+        })
+        @Html.ValidationMessageFor(model => model.RFC, null, new { @class = "error-text" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(model => model.Direccion, htmlAttributes: new { @class = "control-label cod-md-2" })
+        @Html.EditorFor(
+        model => model.Direccion,
+        new
+            {
+                htmlAttributes = new
+                {
+            placeholder = "Ingrese su dirección",
+            @class = "form-control",
+            @id = "Direccion",
+        }
+            })
+        @Html.ValidationMessageFor(model => model.Direccion, null, new { @class = "error-text" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(model => model.CP, htmlAttributes: new { @class = "control-label cod-md-2" })
+        @Html.EditorFor(
+        model => model.CP,
+        new
+            {
+                htmlAttributes = new
+                {
+            placeholder = "Ingrese su Código Postal",
+            @class = "form-control",
+            @id = "CP",
+        }
+            })
+        @Html.ValidationMessageFor(model => model.CP, null, new { @class = "error-text" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label cod-md-2" })
+        @Html.EditorFor(
+        model => model.Email,
+        new
+            {
+                htmlAttributes = new
+                {
+            placeholder = "Ingrese su Email",
+            @class = "form-control",
+            @id = "Email",
+        }
+            })
+        @Html.ValidationMessageFor(model => model.Email, null, new { @class = "error-text" })
+    </div>
+    <div>
+        <input type="submit" value="Registrar" class="btn btn-primary" />
+        @Html.ActionLink("Volver", "Detalle", null, new { @class = "btn btn-success" })
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+
+        function sololetras(e) {
+            key = e.keyCode || e.which;
+            teclado = String.fromCharCode(key).toLowerCase();
+            numero = "abcdefghiyjklmnñopqrstuvwxyzóíáéú";
+            especial = "8-37-38-46-164-13-9-16";
+            tecla_especial = false;
+
+            for (var i in especial) {
+                if (key == especial[i]) {
+                    tecla_especial = true;
+                    break;
+                }
+            }
+            if (numero.indexOf(teclado) == -1 && !tecla_especial) {
+                return false;
+            }
+
+        }
+
+        function solonumeros(e) {
+            key = e.keyCode || e.which;
+            teclado = String.fromCharCode(key);
+            numero = "0123456789.";
+            especial = "8-37-38-46-164-13-9-16";
+            tecla_especial = false;
+
+            for (var i in especial) {
+                if (key == especial[i]) {
+                    tecla_especial = true;
+                    break;
+                }
+            }
+
+            if (numero.indexOf(teclado) == -1 && !tecla_especial) {
+                return false;
+            }
+        }
+    </script>
+}

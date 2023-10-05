@@ -1,0 +1,78 @@
+﻿@model CRUD.ViewModels.CatalogoViewModels.Catalogo
+@{
+    ViewBag.Title = "Lista de Clientes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detalle</h2>
+<script src="~/Scripts/jquery-3.7.1.js"></script>
+
+@Html.ActionLink("Crear", "Create", null, new { @class = "btn btn-primary" })
+@Html.ActionLink("Ver Todos", "DetalleTodos", null, new { @class = "btn btn-success" })
+@Html.ActionLink("Carga masiva", "FormUpload", "UploadExcel", null, new { @class = "btn btn-info" })
+<br />
+<br />
+<table class="table table-hover table-sm center-text">
+    <tr class="center-text">
+        <th scope="col">ID</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellidos</th>
+        <th scope="col">RFC</th>
+        <th scope="col">Direccion</th>
+        <th scope="col">CP</th>
+        <th scope="col">Email</th>
+        <th scope="col">Estado</th>
+        <th scope="col">Acciones</th>
+    </tr>
+    @if (Model.ListaCliente.Count > 0)
+    {
+        foreach (var clientes in Model.ListaCliente)
+        {
+
+            <tr class="center-text">
+                <td scope="row">@clientes.IdCliente</td>
+                <td>@clientes.Nombre</td>
+                <td>@clientes.Apellidos</td>
+                <td>@clientes.RFC</td>
+                <td>@clientes.Direccion</td>
+                <td>@clientes.CP</td>
+                <td>@clientes.Email</td>
+                @if (clientes.Estado == 1)
+                {
+                    <td>Activo</td>
+                }
+                else
+                {
+                    <td>Inactivo</td>
+                }
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new
+               { id = clientes.IdCliente }, new
+               {
+                        @class = "btn btn-success",
+                   onClick = "alert ({ title: 'Are you sure?', " +
+                   "text: 'You will not be able to recover this imaginary file!', " +
+                   "type: 'warning', showCancelButton: true, confirmButtonColor: '#DD6B55', " +
+                   "confirmButtonText: 'Yes, delete it!', closeOnConfirm: false }, " +
+                   "function(){swal('Deleted!', " +
+                   "'Your imaginary file has been deleted.', " +
+                   "'success');}"
+               })
+                    @Html.ActionLink("Eliminar", "Delete",
+                   new { id = clientes.IdCliente },
+                   new { onclick = "return confirm('Estás seguro de eliminar cliente?');", @class = "btn btn-danger" }
+                   )
+
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td>
+                <p>No hay registros</p>
+            </td>
+        </tr>
+    }
+</table>

@@ -1,0 +1,144 @@
+﻿@using System.Data
+@model DataTable 
+@{
+    ViewBag.Title = "Subir Archivo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+@using (Html.BeginForm("FormUpload", "UploadExcel", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div>
+        <label>Upload File:</label>
+        <input type="file" id="inputExcel" name="file" />
+        <input type="submit" value="Show Data" class="btn btn-info" />
+        @Html.ActionLink("Volver", "Detalle", "Cliente", null, new { @class = "btn btn-success" })
+
+    </div>
+    <!--Display Error Message-->
+    <div style="color:red;">@ViewBag.Message</div>
+    <!--Show the Data Table on the View after reading the Excel File-->
+    <br />
+    if (Model != null)
+    {
+
+        <table id="my-table" class="table table-hover table-sm center-text">
+            <thead>
+                <tr id="title">
+                    @for (int i = 0; i < Model.Columns.Count; i++)
+                    {
+                        <th>@Model.Columns[i].ColumnName</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Rows.Count; i++)
+                {
+                    <tr>
+                        @for (int j = 0; j < Model.Columns.Count; j++)
+                        {
+                            <td>@Model.Rows[i][j]</td>
+                        }
+                      
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+        <button type="button" class="btn btn-primary" onclick="enviarDatos()" id="Enviar">Enviar Datos a BD</button>
+
+
+    }
+}
+<div>
+    <label>Identificador único:</label>
+    <input type="number" id="identificador" />
+    <button type="button" class="btn btn-primary" onclick="buscarPorId()">Buscar</button>
+</div>
+
+<div id="tabla" class="table">
+   
+</div>
+
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        function toArrayOfObjects(table) {
+            const columns = Array.from(table.querySelectorAll('th')).map(heading => heading.textContent,);
+
+            const rows = table.querySelectorAll('tbody > tr');
+
+            return Array.from(rows).map(row => {
+                const dataCells = Array.from(row.querySelectorAll('td'));
+
+                return columns.reduce((obj, column, index) => {
+                    obj[column] = dataCells[index].textContent;
+                    return obj;
+                }, {});
+            });
+
+        }
+
+
+        function enviarDatos() {
+            const table = document.getElementById('my-table');
+            const buton = document.getElementById('Enviar');
+
+            const datajson = JSON.stringify(toArrayOfObjects(table));
+            console.log(datajson);
+
+            $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("enviarDatos","UploadExcel")',
+                    contentType: "application/json; charset=utf-8",
+                    data: datajson,
+                    dataType: "json",
+
+                success: function (mensaje) {
+                    alert(mensaje);
+                    alert("Datos guardados correctamente");
+                    buton.style = none;
+                    
+
+                },
+                failure: function (response) {
+                    alert(response);
+                }
+            });
+        }
+
+        function buscarPorId() {
+            const id = $("#identificador").val();
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("BuscarPorId", "UploadExcel")?id=' + id,
+                dataType: 'json',
+                success: function (response) {
+                    if (typeof response === 'string') {
+                        // Si la respuesta es una cadena, significa que no se encontraron datos
+                        $("#tabla").html("<p>No se encontraron datos</p>");
+                    } else {
+                        // Si la respuesta es un objeto JSON, muestra los datos en la tabla
+                        $("#tabla").html(""); // Limpia la tabla antes de agregar nuevos datos
+                        var tableHtml = "<table><thead><tr><th>IdCliente</th><th>Cantidad</th><th>Descripción</th><th>Precio Unitario</th><th>Total</th></tr></thead><tbody>";
+                        $.each(response, function (index, item) {
+                            tableHtml += "<tr><td>" + item.IdCliente + "</td><td>" + item.Cantidad + "</td><td>" + item.Descripcion + "</td><td>" + item.PrecioUnitario + "</td><td>" + item.Total + "</td></tr>";
+                        });
+                        tableHtml += "</tbody></table>";
+                        $("#tabla").html(tableHtml);
+                    }
+
+                },
+                error: function () {
+                    alert('Error en búsqueda');
+                }
+            })
+
+        }
+
+
+
+
+    </script>
+}
